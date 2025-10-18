@@ -1,0 +1,186 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Project Cricket Game</title>
+    <style>
+      *
+      {
+        background-color: black;
+        color: white;
+      }
+      h1 {
+        color: brown;
+        text-align: center;
+        background-color: blanchedalmond;
+        border-radius: 10px;
+      }
+      .btn_restart {
+        height: 50px;
+        width: 100px;
+        margin: 50px;
+        font-weight: bold;
+        font-size: medium;
+        border-radius: 10px;
+      }
+      .btn {
+        margin: 50px;
+        border:none;
+        border-radius: 100px;
+      }
+      img{
+        height:200px;
+        border-radius: 100px;
+      }
+     
+      .btn_restart:hover,.btn:hover {
+        border: 2px solid brown;
+        border-radius: 10px;
+      }
+      div {
+        text-align: center;
+      }
+      .scorelist
+      {
+        background-color: blanchedalmond;
+        border-radius:10px;
+        padding:10px;
+        width:fit-content;
+        margin-left: 30vw;
+      }
+      #user-move
+      {
+        color:brown;
+       font-size: larger;
+       font-family: 'Lucida Sans', 'Lucida Sans Regular', 'Lucida Grande', 'Lucida Sans Unicode', Geneva, Verdana, sans-serif;
+       text-transform: capitalize;
+      }
+       #computer-move
+      {
+        color:rgba(198, 121, 121, 0.5);
+       font-size: larger;
+       font-family: 'Lucida Sans', 'Lucida Sans Regular', 'Lucida Grande', 'Lucida Sans Unicode', Geneva, Verdana, sans-serif;
+       text-transform: capitalize;
+      }
+        #score::first-line
+      {
+        color:rgba(160, 88, 88, 0.8);
+       font-size:1em;
+       font-family: 'Lucida Sans', 'Lucida Sans Regular', 'Lucida Grande', 'Lucida Sans Unicode', Geneva, Verdana, sans-serif;
+       text-transform: capitalize;
+      }
+      #result{
+        color:rgb(29, 119, 29);
+        text-decoration: underline;
+      }
+     
+    </style>
+  </head>
+  <body>
+    <h1>Bat Ball Stump Game</h1>
+    <h2>Game between user and computer</h2>
+    <div>
+      <button onclick="mesage_check('Bat');" class="btn"><img src="./cricket-bat-cartoon-style-vector.jpg" alt=""></button>
+      <button onclick="mesage_check('Ball');" class="btn"><img src="./ball.jpg" alt=""></button>
+      <button onclick="mesage_check('Stump');" class="btn"><img src="./stump.jpg" alt=""></button>
+      <br />
+    </div>
+    <div class="hello"> <h3 id="user-move"></h3>
+    <h3 id="computer-move"></h3>
+    <h3 id="score"></h3>
+    <h3 id="result"></h3></div>
+    <br/>
+    <div style="text-align: center;">
+     <button
+        class="btn_restart"
+        onclick="localStorage.clear();
+      score={
+        win:0,
+        lost:0,
+        tie:0,
+      };
+      document.querySelector('.scorelist').classList.remove('scorelist');
+      document.querySelectorAll('h3')[0].innerHTML=' ';
+      document.querySelectorAll('h3')[1].innerHTML=' ';
+      document.querySelectorAll('h3')[2].innerHTML=' ';
+      document.querySelectorAll('h3')[3].innerHTML=' ';"
+      >
+        Restart
+      </button>
+      </div>
+   
+    <script>
+      let scorestr = localStorage.getItem("userScore");
+      //   let score;
+      //   if(scorestr!==undefined)
+      //   {
+      //     score=JSON.parse(scorestr);
+      //   }
+      //   else{
+      //    score={
+      //         win:0,
+      //         lost:0,
+      //         tie:0,
+      //   };
+      // }
+      let score = JSON.parse(scorestr) || {
+        win: 0,
+        lost: 0,
+        tie: 0,
+      };
+      function choice() {
+        let computer = "";
+        let rand = Math.floor(Math.random() * 3);
+        if (rand == 0) {
+          computer = "Bat";
+        } else if (rand == 1) {
+          computer = "Ball";
+        } else {
+          computer = "Stump";
+        }
+        return computer;
+      }
+      function mesage_check(user_chosen) {
+        let message = "";
+        let computer = choice();
+        if (user_chosen == computer) {
+          message = `*********Tie*************`;
+          score.tie++;
+        } else if (user_chosen == "Stump" && computer == "Bat") {
+          message = `*********You Won*************`;
+          score.win++;
+        } else if (user_chosen == "Stump" && computer == "Ball") {
+          message = ` *********Computer  Won*************`;
+          score.lost++;
+        } else if (user_chosen == "Ball" && computer == "Bat") {
+          message = ` *********Computer Won*************`;
+          score.lost++;
+        } else if (user_chosen == "Ball" && computer == "Stump") {
+          message = `*********You Won*************`;
+          score.win++;
+        } else if (user_chosen == "Bat" && computer == "Ball") {
+          message = `*********User Won*************`;
+          score.win++;
+        } else if (user_chosen == "Bat" && computer == "Stump") {
+          message = `*********Computer Won*************`;
+          score.lost++;
+        }
+        localStorage.setItem("userScore", JSON.stringify(score));
+         document.querySelector('.hello').classList.add('scorelist');
+        document.querySelector(
+          "#user-move"
+        ).innerText = `you have choosen: ${user_chosen}`;
+        document.querySelector(
+          "#computer-move"
+        ).innerText = `computer  choosen: ${computer}`;
+        document.querySelector(
+          "#score"
+        ).innerText = `***********Scores***********\n win:${score.win}\nlost:${score.lost}\nTie:${score.tie}\n`;
+        document.querySelector(
+          "#result"
+        ).innerText = message;
+      }
+    </script>
+  </body>
+</html>
